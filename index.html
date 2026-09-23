@@ -1,39 +1,711 @@
-<!-- CpeUnlock Logo (SVG) -->
-<svg width="200" height="40" viewBox="0 0 200 40" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#7c5cff;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#a78bfa;stop-opacity:1" />
-    </linearGradient>
-  </defs>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CpeUnlock | Control every CPE. Own every byte.</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpolygon points='16,2 29,9 29,23 16,30 3,23 3,9' fill='none' stroke='%237c5cff' stroke-width='2.5' stroke-linejoin='round'/%3E%3Crect x='10' y='14' width='12' height='9' rx='1.5' fill='%237c5cff'/%3E%3Cpath d='M 12 14 L 12 10 Q 12 6 16 6 Q 19 6 20 9' fill='none' stroke='%237c5cff' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0a0f;
+    --bg-2: #12121a;
+    --card: #16161f;
+    --border: #262633;
+    --text: #e8e8f0;
+    --muted: #8888a0;
+    --accent: #7c5cff;
+    --accent-2: #a78bfa;
+    --green: #4ade80;
+  }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
   
-  <!-- Icon: Hexagon with unlock symbol -->
-  <g transform="translate(5, 5)">
-    <!-- Hexagon shape -->
-    <polygon points="15,0 28,7 28,21 15,28 2,21 2,7" 
-             fill="none" 
-             stroke="url(#logoGrad)" 
-             stroke-width="2.5" 
-             stroke-linejoin="round"/>
-    <!-- Unlock symbol (open padlock) -->
-    <rect x="9" y="13" width="12" height="9" rx="1.5" 
-          fill="url(#logoGrad)" opacity="0.9"/>
-    <path d="M 11 13 L 11 9 Q 11 5 15 5 Q 18 5 19 8" 
-          fill="none" 
-          stroke="url(#logoGrad)" 
-          stroke-width="2" 
-          stroke-linecap="round"/>
-    <!-- Keyhole dot -->
-    <circle cx="15" cy="17" r="1.5" fill="#0a0a0f"/>
-  </g>
+  /* NAVBAR */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+    padding: 14px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  nav .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  nav .logo-text {
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+  nav .logo-text span { color: var(--accent); }
+  nav .links { display: flex; gap: 30px; }
+  nav .links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: 0.2s;
+  }
+  nav .links a:hover { color: var(--text); }
+  nav .cta {
+    background: var(--accent);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: 0.2s;
+  }
+  nav .cta:hover { background: var(--accent-2); }
   
-  <!-- Text: CpeUnlock -->
-  <text x="45" y="26" 
-        font-family="Inter, -apple-system, sans-serif" 
-        font-size="20" 
-        font-weight="700" 
-        fill="#e8e8f0" 
-        letter-spacing="-0.5">
-    Cpe<tspan fill="url(#logoGrad)">Unlock</tspan>
-  </text>
-</svg>
+  /* HERO */
+  .hero {
+    padding: 160px 40px 100px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(124,92,255,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    background: rgba(124,92,255,0.1);
+    border: 1px solid rgba(124,92,255,0.3);
+    border-radius: 100px;
+    font-size: 0.8rem;
+    color: var(--accent-2);
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .hero h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .hero h1 .gradient {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 600px;
+    margin: 0 auto 40px;
+    position: relative;
+  }
+  .hero-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  .btn {
+    padding: 14px 32px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: 0.2s;
+    display: inline-block;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 8px 30px rgba(124,92,255,0.3);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(124,92,255,0.5); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent-2); }
+  
+  .hero-meta {
+    margin-top: 40px;
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    color: var(--muted);
+    position: relative;
+  }
+  .hero-meta span::before {
+    content: '✓ ';
+    color: var(--green);
+    font-weight: bold;
+  }
+  
+  /* DASHBOARD MOCKUP */
+  .dashboard {
+    max-width: 900px;
+    margin: 80px auto 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+  }
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .dashboard-header h3 { font-size: 1rem; font-weight: 600; }
+  .live-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--green);
+  }
+  .live-dot {
+    width: 8px; height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .stat-box {
+    background: var(--bg-2);
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .stat-box .label { font-size: 0.75rem; color: var(--muted); margin-bottom: 4px; }
+  .stat-box .value { font-size: 1.5rem; font-weight: 700; }
+  .stat-box .change { font-size: 0.7rem; color: var(--green); }
+  
+  .device-list { font-size: 0.85rem; }
+  .device-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--bg-2);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border: 1px solid var(--border);
+  }
+  .device-row .name { font-weight: 600; }
+  .device-row .meta { color: var(--muted); font-size: 0.75rem; }
+  .device-row .status {
+    color: var(--green);
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  /* SECTIONS */
+  section { padding: 100px 40px; max-width: 1200px; margin: auto; }
+  .section-tag {
+    text-align: center;
+    color: var(--accent-2);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    text-align: center;
+    color: var(--muted);
+    max-width: 600px;
+    margin: 0 auto 60px;
+  }
+  
+  /* FEATURES GRID */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .feature-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 30px;
+    transition: 0.3s;
+  }
+  .feature-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+  }
+  .feature-icon {
+    width: 44px; height: 44px;
+    background: rgba(124,92,255,0.1);
+    border: 1px solid rgba(124,92,255,0.3);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+  }
+  .feature-card h3 { font-size: 1.05rem; margin-bottom: 10px; }
+  .feature-card p { color: var(--muted); font-size: 0.9rem; margin-bottom: 16px; }
+  .feature-link {
+    color: var(--accent-2);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .feature-link:hover { text-decoration: underline; }
+  
+  /* NODES */
+  .nodes {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 40px;
+  }
+  .node {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+  }
+  .node .ok { color: var(--green); font-size: 0.7rem; }
+  
+  /* INFRASTRUCTURE */
+  .infra {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .infra h2 { font-size: 2.2rem; letter-spacing: -1px; margin-bottom: 20px; }
+  .infra p { color: var(--muted); margin-bottom: 30px; }
+  .infra-list { list-style: none; }
+  .infra-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.95rem;
+  }
+  .infra-list li::before {
+    content: '✓';
+    color: var(--green);
+    font-weight: bold;
+  }
+  .infra-visual {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+  }
+  .infra-visual .icon { font-size: 4rem; margin-bottom: 20px; }
+  .infra-visual .text { color: var(--muted); font-size: 0.9rem; }
+  
+  /* PRICING */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .pricing-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 36px;
+    position: relative;
+    transition: 0.3s;
+  }
+  .pricing-card:hover { border-color: var(--accent); }
+  .pricing-card.featured {
+    border-color: var(--accent);
+    box-shadow: 0 20px 60px rgba(124,92,255,0.15);
+  }
+  .pricing-card.featured::before {
+    content: 'POPULAR';
+    position: absolute;
+    top: -12px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: white;
+    padding: 4px 14px;
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .pricing-card h3 { font-size: 1.1rem; margin-bottom: 8px; }
+  .pricing-price { font-size: 2rem; font-weight: 800; margin: 16px 0 4px; letter-spacing: -1px; }
+  .pricing-price span { font-size: 0.85rem; color: var(--muted); font-weight: 400; }
+  .pricing-desc { color: var(--muted); font-size: 0.85rem; margin-bottom: 24px; }
+  .pricing-btn {
+    display: block;
+    text-align: center;
+    padding: 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: 0.2s;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .pricing-btn:hover { border-color: var(--accent); color: var(--accent-2); }
+  .pricing-card.featured .pricing-btn {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+  .pricing-card.featured .pricing-btn:hover { background: var(--accent-2); }
+  
+  /* CTA SECTION */
+  .cta-section {
+    text-align: center;
+    padding: 120px 40px;
+    background: linear-gradient(135deg, rgba(124,92,255,0.1) 0%, rgba(167,139,250,0.05) 100%);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .cta-section h2 { font-size: 2.5rem; font-weight: 700; letter-spacing: -1px; margin-bottom: 20px; }
+  .cta-section p { color: var(--muted); margin-bottom: 32px; }
+  
+  /* FOOTER */
+  footer {
+    padding: 40px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  footer a { color: var(--accent-2); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .footer-logo-text {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text);
+  }
+  .footer-logo-text span { color: var(--accent); }
+  
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    nav .links { display: none; }
+    nav .logo-text { font-size: 0.95rem; }
+    .hero { padding: 120px 20px 60px; }
+    .hero h1 { font-size: 2.5rem; letter-spacing: -1px; }
+    section { padding: 60px 20px; }
+    .section-title { font-size: 1.8rem; }
+    .infra { grid-template-columns: 1fr; padding: 30px; gap: 30px; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .cta-section h2 { font-size: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="#" class="logo">
+    <svg width="34" height="34" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="navLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#7c5cff;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#a78bfa;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <polygon points="16,2 29,9 29,23 16,30 3,23 3,9" 
+               fill="none" 
+               stroke="url(#navLogoGrad)" 
+               stroke-width="2.5" 
+               stroke-linejoin="round"/>
+      <rect x="10" y="14" width="12" height="9" rx="1.5" 
+            fill="url(#navLogoGrad)" opacity="0.9"/>
+      <path d="M 12 14 L 12 10 Q 12 6 16 6 Q 19 6 20 9" 
+            fill="none" 
+            stroke="url(#navLogoGrad)" 
+            stroke-width="2" 
+            stroke-linecap="round"/>
+      <circle cx="16" cy="18.5" r="1.5" fill="#0a0a0f"/>
+    </svg>
+    <span class="logo-text">Cpe<span>Unlock</span></span>
+  </a>
+  <div class="links">
+    <a href="#features">Features</a>
+    <a href="#infrastructure">Infrastructure</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <a href="https://t.me/CpeUnlock" target="_blank" class="cta">Contact Us</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Self-hosted TR-069 ACS for ISPs</div>
+  <h1>Control every CPE.<br><span class="gradient">Own every byte.</span></h1>
+  <p>Deploy an enterprise-ready ACS on your own VPS. Provision, monitor and manage multi-vendor routers from one modern operations console.</p>
+  <div class="hero-buttons">
+    <a href="https://t.me/CpeUnlock" target="_blank" class="btn btn-primary">Contact on Telegram</a>
+    <a href="#features" class="btn btn-secondary">View Features →</a>
+  </div>
+  <div class="hero-meta">
+    <span>Unlimited devices</span>
+    <span>ISP-owned infrastructure</span>
+    <span>Updates included</span>
+  </div>
+
+  <!-- DASHBOARD MOCKUP -->
+  <div class="dashboard">
+    <div class="dashboard-header">
+      <h3>ACS Operations Console</h3>
+      <div class="live-badge"><span class="live-dot"></span>Live</div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="label">Managed CPEs</div>
+        <div class="value">12,840</div>
+        <div class="change">+124 today</div>
+      </div>
+      <div class="stat-box">
+        <div class="label">Online now</div>
+        <div class="value">12,612</div>
+        <div class="change">98.2% healthy</div>
+      </div>
+      <div class="stat-box">
+        <div class="label">Inform sessions</div>
+        <div class="value">48.3k</div>
+        <div class="change">Zero backlog</div>
+      </div>
+    </div>
+    <div class="device-list">
+      <div class="device-row">
+        <div>
+          <div class="name">ZYXEL • AOT5221ZY</div>
+          <div class="meta">TR-181 • Informed 1m ago</div>
+        </div>
+        <div class="status"><span class="live-dot"></span>Online</div>
+      </div>
+      <div class="device-row">
+        <div>
+          <div class="name">TP-Link • Archer C6</div>
+          <div class="meta">TR-069 • Informed 2m ago</div>
+        </div>
+        <div class="status"><span class="live-dot"></span>Online</div>
+      </div>
+      <div class="device-row">
+        <div>
+          <div class="name">Nokia • G-2425G-A</div>
+          <div class="meta">TR-069 • Informed 3m ago</div>
+        </div>
+        <div class="status"><span class="live-dot"></span>Online</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-tag">One Operations Platform</div>
+  <h2 class="section-title">Everything your team needs to manage the access edge.</h2>
+  <p class="section-sub">Turn repetitive device support into predictable, auditable workflows—from first Inform to ongoing lifecycle management.</p>
+  
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>Zero-touch onboarding</h3>
+      <p>Discover devices and build their complete parameter tree automatically after connection.</p>
+      <a href="https://t.me/CpeUnlock" target="_blank" class="feature-link">Learn more →</a>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔧</div>
+      <h3>Remote provisioning</h3>
+      <p>Configure WAN, VLAN, PPPoE, Wi-Fi and LAN parameters without a site visit.</p>
+      <a href="https://t.me/CpeUnlock" target="_blank" class="feature-link">Learn more →</a>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌐</div>
+      <h3>Multi-vendor support</h3>
+      <p>Operate TR-069, TR-098 and TR-181 CPEs through consistent vendor-aware views.</p>
+      <a href="https://t.me/CpeUnlock" target="_blank" class="feature-link">Learn more →</a>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📦</div>
+      <h3>Firmware operations</h3>
+      <p>Schedule controlled firmware and file deployments with task and fault visibility.</p>
+      <a href="https://t.me/CpeUnlock" target="_blank" class="feature-link">Learn more →</a>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚙️</div>
+      <h3>Presets & automation</h3>
+      <p>Apply provisions and policy presets at scale using dependable device targeting.</p>
+      <a href="https://t.me/CpeUnlock" target="_blank" class="feature-link">Learn more →</a>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+      <h3>Private by design</h3>
+      <p>The platform and subscriber data stay entirely inside your infrastructure.</p>
+      <a href="https://t.me/CpeUnlock" target="_blank" class="feature-link">Learn more →</a>
+    </div>
+  </div>
+  
+  <div class="nodes">
+    <div class="node">CpeUnlock ACS Node 01 <span class="ok">● Operational</span></div>
+    <div class="node">CpeUnlock ACS Node 02 <span class="ok">● Operational</span></div>
+    <div class="node">CpeUnlock ACS Node 03 <span class="ok">● Operational</span></div>
+  </div>
+</section>
+
+<!-- INFRASTRUCTURE -->
+<section id="infrastructure">
+  <div class="infra">
+    <div>
+      <div class="section-tag" style="text-align:left;">Your Infrastructure</div>
+      <h2>Your server. Your data. Your control.</h2>
+      <p>CpeUnlock ACS is deployed directly on the ISP's VPS, cloud account or on-premises server. You retain complete ownership of infrastructure, security and customer data.</p>
+      <ul class="infra-list">
+        <li>One isolated ACS installation per license</li>
+        <li>Cloud VPS or on-premises deployment</li>
+        <li>No vendor-hosted subscriber database</li>
+        <li>Docker-based repeatable installation</li>
+      </ul>
+    </div>
+    <div class="infra-visual">
+      <div class="icon">🖥️</div>
+      <div class="text">100% data ownership<br>No subscriber data leaves your server</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-tag">Simple Licensing</div>
+  <h2 class="section-title">Start small. Operate without device limits.</h2>
+  <p class="section-sub">Choose the plan that fits your deployment stage.</p>
+  
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <h3>1 Month</h3>
+      <div class="pricing-price">Free <span>/ ₹299 assisted</span></div>
+      <div class="pricing-desc">Validate CpeUnlock ACS in your own environment.</div>
+      <a href="https://t.me/CpeUnlock" target="_blank" class="pricing-btn">Start Free Trial</a>
+    </div>
+    <div class="pricing-card featured">
+      <h3>1 Year</h3>
+      <div class="pricing-price">₹6,999 <span>/ installation</span></div>
+      <div class="pricing-desc">Production licensing with active updates included.</div>
+      <a href="https://t.me/CpeUnlock" target="_blank" class="pricing-btn">Contact Now</a>
+    </div>
+    <div class="pricing-card">
+      <h3>6 Months</h3>
+      <div class="pricing-price">₹3,999 <span>/ installation</span></div>
+      <div class="pricing-desc">Extended evaluation for staged ISP deployment.</div>
+      <a href="https://t.me/CpeUnlock" target="_blank" class="pricing-btn">Contact Now</a>
+    </div>
+  </div>
+  <p style="text-align:center; color:var(--muted); font-size:0.8rem; margin-top:30px;">
+    * Unlimited provisioning is subject to the capacity and performance of the client's own infrastructure.
+  </p>
+</section>
+
+<!-- CTA SECTION -->
+<section class="cta-section" id="contact">
+  <h2>Ready to modernize CPE operations?</h2>
+  <p>Deploy CpeUnlock ACS on your infrastructure today.</p>
+  <a href="https://t.me/CpeUnlock" target="_blank" class="btn btn-primary">Contact on Telegram</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <svg width="28" height="28" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="footLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#7c5cff;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#a78bfa;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <polygon points="16,2 29,9 29,23 16,30 3,23 3,9" 
+               fill="none" 
+               stroke="url(#footLogoGrad)" 
+               stroke-width="2.5" 
+               stroke-linejoin="round"/>
+      <rect x="10" y="14" width="12" height="9" rx="1.5" 
+            fill="url(#footLogoGrad)" opacity="0.9"/>
+      <path d="M 12 14 L 12 10 Q 12 6 16 6 Q 19 6 20 9" 
+            fill="none" 
+            stroke="url(#footLogoGrad)" 
+            stroke-width="2" 
+            stroke-linecap="round"/>
+    </svg>
+    <span class="footer-logo-text">Cpe<span>Unlock</span></span>
+  </div>
+  <p>© 2026 CpeUnlock. All rights reserved. | 
+  Telegram: <a href="https://t.me/CpeUnlock" target="_blank">@CpeUnlock</a></p>
+</footer>
+
+</body>
+</html>
